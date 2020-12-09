@@ -1,28 +1,36 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input type="text" placeholder="请搜索"
+      @input="searchInput($event)"
+    />
+    <List ref="child" :msg="course" :resurceArr="resurceArr"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import List from './components/List.vue'
+import course from './dataCourse';
+import {throttle} from './throttle'; // 导入节流函数
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    List
+  },
+  data() {
+    return {
+      course,
+      resurceArr:[]
+    }
+  },
+  methods: {
+    searchInput:throttle(function(e) {
+      // 父组件通过 $refs 给子组件传递事件
+      this.$refs.child.parentMsg(e.target.value)
+    },3000)
+  },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
